@@ -22,7 +22,6 @@ def viz(port=8089):
         sent = sock.sendto("get".encode(), server_address)
 
         data, server = sock.recvfrom(65507)
-        print("Fragment size : {}".format(len(data)))
         if len(data) == 4:
             # This is a message error sent back by the server
             if(data == "FAIL"):
