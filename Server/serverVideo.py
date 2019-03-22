@@ -14,7 +14,7 @@ import sys
 from threading import Thread, Lock
 import sys
 
-def main(port=8089):
+def main(port=8089, ruta='sebastian/test1.mp4'):
 
 
         debug = True
@@ -40,7 +40,7 @@ def main(port=8089):
                         """
                         Thread.__init__(self)
                         self.encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality]
-                        self.cap = cv2.VideoCapture('sebastian/test3.mp4')
+                        self.cap = cv2.VideoCapture(ruta)
                         self.running = True
                         self.buffer = None
                         self.lock = Lock()

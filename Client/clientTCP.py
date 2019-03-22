@@ -5,7 +5,7 @@ import os
 import time
 import client
 
-serverName = '157.253..222.174'
+serverName = '157.253.222.174'
 serverPort = 12000
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect((serverName,serverPort))
@@ -60,14 +60,21 @@ while True:
 
 	elif opcion.lower() == 'ver':
 
-		print('Servidor: {} (Seleccione)'.format(res))
+		path = input('Servidor: {} (Seleccione)'.format(res))
+
+
+		clientSocket.send(path.encode())
+
+
+
+		port_udp = clientSocket.recv(1024).decode()
 
 		print('antes')
 		time.sleep(5)
 		print('despues')
 
 
-		client.viz(int(res))
+		client.viz(int(port_udp))
 
 		clientSocket.send("llego el puerto".encode())
 

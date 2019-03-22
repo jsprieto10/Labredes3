@@ -105,13 +105,15 @@ class Session(Thread):
 	def send_video(self):
 
 
-		self.sock.send("ruta del video".encode())
+		self.sock.send("ruta del video (sebastian/test1.mp4)".encode())
 
+
+		ruta = self.sock.recv(1024).decode()
 		p = find_free_port()
 
 
 		self.sock.send(str(p).encode())
-		serverVideo.main(p)
+		serverVideo.main(p,ruta)
 		
 		print(self.sock.recv(1024).decode())
 
