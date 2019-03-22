@@ -5,29 +5,37 @@ import sys
 import time
 
 
-cv2.namedWindow("Image")
 
-# Create a UDP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-host = '127.0.0.1'
-port = 8080
-server_address = (host, port)
+def viz(port=8089):
 
-while True:
-    
-    sent = sock.sendto("get".encode(), server_address)
+    print('llego: ',port)
+    cv2.namedWindow("Image")
 
-    data, server = sock.recvfrom(65507)
-    print("Fragment size : {}".format(len(data)))
-    if len(data) == 4:
-        # This is a message error sent back by the server
-        if(data == "FAIL"):
-            continue
-    array = np.frombuffer(data, dtype=np.dtype('uint8'))
-    img = cv2.imdecode(array, 1)
-    cv2.imshow("Image", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # Create a UDP socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host = '157.253.222.174'
+    port = port
+    server_address = (host, port)
 
-print("The client is quitting. If you wish to quite the server, simply call : \n")
-print("echo -n \"quit\" > /dev/udp/{}/{}".format(host, port))
+    while True:
+        
+        sent = sock.sendto("get".encode(), server_address)
+
+        data, server = sock.recvfrom(65507)
+        print("Fragment size : {}".format(len(data)))
+        if len(data) == 4:
+            # This is a message error sent back by the server
+            if(data == "FAIL"):
+                continue
+        array = np.frombuffer(data, dtype=np.dtype('uint8'))
+        img = cv2.imdecode(array, 1)
+        cv2.imshow("Image", img)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    print("The client is quitting. If you wish to quite the server, simply call : \n")
+    print("echo -n \"quit\" > /dev/udp/{}/{}".format(host, port))
+
+
+if __name__ == '__main__':
+    viz()

@@ -2,6 +2,8 @@ from socket import *
 from tkinter import filedialog
 from tkinter import *
 import os
+import time
+import client
 
 serverName = '127.0.0.1'
 serverPort = 12000
@@ -55,6 +57,19 @@ while True:
 
 		with open(file_to_send, 'rb') as f:
 			clientSocket.sendfile(f, 0)
+
+	elif opcion.lower() == 'ver':
+
+		print('Servidor: {} (Seleccione)'.format(res))
+
+		print('antes')
+		time.sleep(5)
+		print('despues')
+
+
+		client.viz(int(res))
+
+		clientSocket.send("llego el puerto".encode())
 
 
 	else:

@@ -1,6 +1,8 @@
 from threading import Thread
 from pymongo import MongoClient
 import os
+from helper import find_free_port
+import serverVideo
 
 class Session(Thread):
 
@@ -30,6 +32,9 @@ class Session(Thread):
 
 			elif order == 'SUBIR':
 				self.upload_video()
+
+			elif order == 'VER':
+				self.send_video()
 
 			else:
 			 	self.sock.send('Repetir opcion por favor'.encode())
@@ -80,10 +85,7 @@ class Session(Thread):
 
 		CHUNK_SIZE = 1024*8
 		file_name = self.sock.recv(1024).decode().split('/')[-1]
-
-
 		self.sock.send('Esta listo para recibir'.encode())
-
 
 		size = int(self.sock.recv(1024).decode())//CHUNK_SIZE
 
@@ -98,5 +100,21 @@ class Session(Thread):
 
 		print('termino')
 		self.sock.send('Video subido correctamente¬'.encode())
+
+
+	def send_video(self):
+
+
+		self.sock.send("ruta del video".encode())
+
+		p = find_free_port()
+
+
+		self.sock.send(str(p).encode())
+		serverVideo.main(p)
+		
+		print(self.sock.recv(1024).decode())
+
+		self.sock.send("Eeyy termine¬".encode())
 
 
