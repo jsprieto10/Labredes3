@@ -60,6 +60,7 @@ while True:
 		with open(file_to_send, 'rb') as f:
 			clientSocket.sendfile(f, 0)
 
+
 	elif opcion.lower() == 'ver':
 
 		escogido = input('Servidor: {} (Seleccione) '.format(res))

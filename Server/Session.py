@@ -4,6 +4,7 @@ import os
 from helper import find_free_port
 import streaming_udp
 import streaming_tcp
+import time
 
 class Session(Thread):
 
@@ -91,6 +92,8 @@ class Session(Thread):
 
 		size = int(self.sock.recv(1024).decode())//CHUNK_SIZE
 
+
+		print(size)
 		self.sock.send('Ok'.encode())
 
 		with open(os.path.join(self.username, file_name), 'wb') as f:
@@ -99,11 +102,12 @@ class Session(Thread):
 				chunk = self.sock.recv(CHUNK_SIZE)
 				f.write(chunk)
 				i+=1
-			f.close()
 
 
-		print('termino')
+		
 		self.sock.send('Video subido correctamente¬'.encode())
+		time.sleep(5)
+		print('terminando')
 
 
 	def send_video(self):
