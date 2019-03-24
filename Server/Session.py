@@ -2,7 +2,8 @@ from threading import Thread
 from pymongo import MongoClient
 import os
 from helper import find_free_port
-import serverVideo
+import streaming_udp
+import streaming_tcp
 
 class Session(Thread):
 
@@ -105,7 +106,19 @@ class Session(Thread):
 	def send_video(self):
 
 
+		self.sock.send('Quieres ver el video usano tcp o udp (T/U)'.encode())
+		escogido = self.sock.recv(1024).decode()
+
+
+		self.sock.send('Escoge una calidad del 1 al 100 (10 recomendado,Si escoger un calidad muy alta el video puede fallar )'.encode())
+		calidad = int(self.sock.recv(1024).decode())
+
+
+
 		self.sock.send("ruta del video (sebastian/test1.mp4)".encode())
+
+
+
 
 
 		ruta = self.sock.recv(1024).decode()
@@ -113,7 +126,14 @@ class Session(Thread):
 
 
 		self.sock.send(str(p).encode())
-		serverVideo.main(p,ruta)
+
+
+
+		if escogido.upper() == 'T':
+			streaming_tcp.main(p,ruta,calidad)
+
+		else:
+			streaming_udp.main(p,ruta,calidad)
 		
 		print(self.sock.recv(1024).decode())
 
