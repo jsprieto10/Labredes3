@@ -53,8 +53,9 @@ while True:
 		
 		print('Servidor:', clientSocket.recv(1024).decode())
 
-
 		clientSocket.send(str(os.path.getsize(file_to_send)).encode())
+
+		clientSocket.recv(1024).decode()
 
 		with open(file_to_send, 'rb') as f:
 			clientSocket.sendfile(f, 0)

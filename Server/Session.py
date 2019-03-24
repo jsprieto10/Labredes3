@@ -86,9 +86,12 @@ class Session(Thread):
 
 		CHUNK_SIZE = 1024*8
 		file_name = self.sock.recv(1024).decode().split('/')[-1]
+
 		self.sock.send('Esta listo para recibir'.encode())
 
 		size = int(self.sock.recv(1024).decode())//CHUNK_SIZE
+
+		self.sock.send('Ok'.encode())
 
 		with open(os.path.join(self.username, file_name), 'wb') as f:
 			i=0
