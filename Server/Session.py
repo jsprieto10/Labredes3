@@ -18,28 +18,34 @@ class Session(Thread):
 	def run(self):
 
 		while True:
-			order = self.sock.recv(1024).decode().upper()
+			order = ''
+			try:
+				order = self.sock.recv(1024).decode().upper()
+				if order == 'QUIT':
+					self.sock.send('OK'.encode())
+					print('client: {} is requesting to close connection'.format(self.addr))
+					self.sock.close()
+					print('connection close')
+					break
 
-			if order == 'QUIT':
-				print('client: {} is requesting to close connection')
-				self.sock.close()
-				print('connection close')
-				break
+				elif order == 'REGISTRO':
+				 	self.create_user()
 
-			elif order == 'REGISTRO':
-			 	self.create_user()
+				elif order == 'LOGIN':
+				 	self.search_login()
 
-			elif order == 'LOGIN':
-			 	self.search_login()
+				elif order == 'SUBIR':
+					self.upload_video()
 
-			elif order == 'SUBIR':
-				self.upload_video()
+				elif order == 'VER':
+					self.send_video()
 
-			elif order == 'VER':
-				self.send_video()
+				else:
+				 	self.sock.send('Repetir opcion por favor'.encode())
+			except:
 
-			else:
-			 	self.sock.send('Repetir opcion por favor'.encode())
+				print('lol')
+				time.sleep(1)
 
 
 	def create_user(self):
