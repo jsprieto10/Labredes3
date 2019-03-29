@@ -21,6 +21,13 @@ class Session(Thread):
 			order = ''
 			try:
 				order = self.sock.recv(1024).decode().upper()
+
+				if 'ORDER_TEST' in order:
+					o,u,p = order.lower().split()
+					self.test_login(u,p)
+					self.sock.close()
+					break
+
 				if order == 'QUIT':
 					self.sock.send('OK'.encode())
 					print('client: {} is requesting to close connection'.format(self.addr))
@@ -42,10 +49,24 @@ class Session(Thread):
 
 				else:
 				 	self.sock.send('Repetir opcion por favor'.encode())
-			except:
+			except Exception as e:
+				raise e
 
-				print('lol')
-				time.sleep(1)
+
+
+	def test_login(self, user, password):
+
+		db = MongoClient().redes
+		usr = db.usuarios.find_one({'user': user, 'password': password})
+
+		msj = 'No se ha podido encontrar el usuario con nombre {} y clave {}¬'.format(user, password)
+
+		if usr:
+			self.is_logged = True
+			self.username = user
+			msj = 'Loggeado correctamente¬'
+		
+		self.sock.send(msj.encode())
 
 
 	def create_user(self):

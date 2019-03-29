@@ -2,11 +2,11 @@ from socket import *
 import os
 from Session import Session
 
-serverPort = 12000
+serverPort = 8090
 serverSocket = socket(AF_INET,SOCK_STREAM)
-serverSocket.bind(('0.0.0.0',serverPort))
-serverSocket.listen(10)
-print('The server is ready to recieve connections')
+serverSocket.bind(('',serverPort))
+serverSocket.listen(250)
+print('The server is ready to recieve connections in {}:{}'.format(gethostbyname(gethostname()),serverPort))
 
 while True:
 	print('waiting for connection...')
@@ -14,7 +14,6 @@ while True:
 	print('...connected from:',addr)
 	t = Session(clientsock, addr)
 	t.start()
-
 
 
 
